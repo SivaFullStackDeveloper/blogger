@@ -17,8 +17,6 @@ const user = new schema({
         type:String,
         required:true,
     },
-    
-
 });
 
 const exporting = mongoose.model('user',user);

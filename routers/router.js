@@ -36,6 +36,20 @@ router.post('/user/register',async(req,res)=>{
         res.send(savedUser);
 });
 
+router.get('/checkuser/:name',async(req,res)=>{
+    const userExist = await user.findOne({name:req.params.name});
+    if(userExist) return res.status(500).send('user already exist');
+    if(userExist) {
+    res.status(200).json({
+        status:true,
+
+    });}else{
+        res.status(200).json({
+            status:false,
+
+        });
+    }
+});
 
 router.post('/profile/login',async(req,res)=>{
     const {error} = joi.object({
