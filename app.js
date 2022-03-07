@@ -9,6 +9,7 @@ dotenv.config();
 let app  = null;
 let url  = null;
 let port = null;
+let webport=null;
 
 
 const initialvar = async()=>{
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 url  = process.env.MONGO_URL;
 port = process.env.PORT;
+webport=process.env.Port;
 
 }
 
@@ -41,7 +43,7 @@ const middleware = async()=>{
     app.use('/register',authuse);
 }
 const listentoport = async()=>{
-    app.listen(port,()=>{
+    app.listen(webport||port,()=>{
     console.log('connected to port',port);
     });
 
