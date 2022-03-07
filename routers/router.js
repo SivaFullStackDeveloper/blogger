@@ -50,7 +50,7 @@ router.get('/checkuser/:name',async(req,res)=>{
         });
     }
 });
-router.get('/checkuser/:email',async(req,res)=>{
+router.get('/checkemail/:email',async(req,res)=>{
     const userExist = await user.findOne({email:req.params.email});
 
     if(userExist) {
