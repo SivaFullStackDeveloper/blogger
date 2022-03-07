@@ -37,7 +37,7 @@ router.post('/user/register',async(req,res)=>{
 });
 
 router.get('/checkuser/:name',async(req,res)=>{
-    const userExist = await user.findOne({name:req.params.name});
+    const userExist = await user.findOne({email:req.params.name});
   
     if(userExist) {
     res.status(200).json({
@@ -50,6 +50,19 @@ router.get('/checkuser/:name',async(req,res)=>{
         });
     }
 });
+router.get('/checkuser/:email',async(req,res)=>{
+    const userExist = await user.findOne({name:req.params.email});
+
+    if(userExist) {
+    res.status(200).json({
+        status:true,
+    });}else{
+        res.status(200).json({
+            status:false,
+        });
+    }
+});
+
 
 router.post('/profile/login',async(req,res)=>{
     const {error} = joi.object({
