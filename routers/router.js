@@ -92,7 +92,7 @@ router.get('/checkemail/:email',async(req,res)=>{
 router.post('/profile/login',async(req,res)=>{
     const joischemaforlogin  = joi.object({
         email:joi.string().email(),
-        password:joi.string().required().min(8),
+        password:joi.string().min(8),
 
     });
 
