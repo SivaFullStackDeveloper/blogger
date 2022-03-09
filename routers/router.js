@@ -73,11 +73,11 @@ router.post("/profile/login",async(req, res) => {
 
 
 
-           const token  = jwt.sign({email:req.body.email},process.env.Token);
-           res.status(200).json({
-               token:token,
-               msg:'login sucessfull'
-            });
+        const token  = jwt.sign({_id:use._id},process.env.Token);
+                   res.header('auth-token',token).json({
+                       token:token,
+                       mes:"login sucessfully"
+                   });
     
 
   });
