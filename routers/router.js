@@ -66,13 +66,14 @@ router.get('/checkemail/:email',async(req,res)=>{
 
 router.post("/profile/login",async(req, res) => {
     const use = await user.findOne({email:req.body.email});
+    console.log(use);
     if(!use) return res.status(200).json({'status':false,msg:"incorrect email"});;
     const validatepassword = await bcrypt.compare(req.body.password,use.password);
     if(!validatepassword){
-        res.status(200).json({'status':false,msg:"incorrect password"});
+        res.json({'status':false,msg:"incorrect password"});
     }else{
         const token = jwt.sign({email:req.body.email},process.env.Token);
-        res.status(200).json({'status':true,'token':token});
+        res.json({'status':true,'token':token});
 
     }
 
