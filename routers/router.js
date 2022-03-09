@@ -75,11 +75,7 @@ router.post("/profile/login",async(req, res) => {
         res.status(200).json({'status':true,'token':token});
 
     }
-        
-     
-  
-      
-  
+
   });
 
 // router.post('/profile/login',async(req,res)=>{
