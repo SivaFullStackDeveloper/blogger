@@ -64,6 +64,8 @@ router.get('/checkemail/:email',async(req,res)=>{
 });
 
 
+
+
 router.post('/profile/login',async(req,res)=>{
     const {error} = joi.object({
         email   : joi.string().required().email(),
@@ -71,10 +73,16 @@ router.post('/profile/login',async(req,res)=>{
     }).validate(req.body);
     if(error) return res.status(400).send(error.details[0].message);
     const userExist = await user.findOne({email:req.body.email});
-    if(!userExist) return res.status(400).send('user does not exist');
+    if(!userExist) {
+         return res.status(400).send({
+            status:false,
+        });
+}
     const validPass = await bcrypt.compare(req.body.password,userExist.password);
     if(!validPass){ 
-        return res.status(400).send('invalid password');
+        return res.status(400).send({
+            status:false,
+        });
     }else{
         const token = jwt.sign({_id:userExist._id},process.env.Token,{expiresIn:'24h'});
         res.json({
