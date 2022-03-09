@@ -80,7 +80,7 @@ router.post('/profile/login',async(req,res)=>{
 }
     const validPass = await bcrypt.compare(req.body.password,userExist.password);
     if(!validPass){ 
-        return res.status(400).send({
+        return res.status(200).send({
             status:false,
         });
     }else{
