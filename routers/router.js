@@ -64,43 +64,20 @@ router.get('/checkemail/:email',async(req,res)=>{
 });
 
 
-router.post('/profile/login',async(req,res)=>{
-    const joischemaforlogin  = joi.object({
-        email:joi.string().required().email(),
-        password:joi.string().required().min(8),
-
-    });
-
-    const {error} = joischemaforlogin.validate(req.body);
-    if(error) {
-        return res.status(400).send(error.details[0].message);
-    }else{
-        const use = await user.findOne({email:req.body.email});
-        if(!use) return res.status(400).json('email is not valid please check email and try again!!!');
-        const validatepassword = await bcrypt.compare(req.body.password,use.password);
-        if(!validatepassword) return res.status(400).json('password is not correct please check password and try again!!!');
-
-
-
-           const token  = jwt.sign({_id:use._id},process.env.Token);
-           res.json({
-               token:token,
-            ms:"login sucessfull"});
-    }
-
-})
-
-// router.route("/profile/login").post((req, res) => {
-//     user.findOne({ name: req.body.name }, (err, result) => {
+// router.post("/profile/login",async(req, res) => {
+//     user.findOne({ username: req.body.username }, (err, result) => {
+        
 //       if (err) return res.status(500).json({ msg: err });
 //       if (result === null) {
 //         return res.status(403).json("Username incorrect");
+
+
 //       }
-//       const validatepassword = await bcrypt.compare(req.body.password,user.password);
-//       if (result.password === validatepassword) {
+      
+      
+//       if (result.password === req.body.password) {
 //         // here we implement the JWT token functionality
-     
-//         let token = jwt.sign({ name: req.body.name }, process.env.Token, {});
+//         let token = jwt.sign({ username: req.body.username }, process.env.Token,{});
   
 //         res.json({
 //           token: token,
@@ -111,6 +88,33 @@ router.post('/profile/login',async(req,res)=>{
 //       }
 //     });
 //   });
+
+router.post('/profile/login',async(req,res)=>{
+    const joischemaforlogin  = joi.object({
+        email:joi.string().email(),
+        password:joi.string().required().min(8),
+
+    });
+
+    const {error} = joischemaforlogin.validate(req.body);
+    if(error) {
+        return res.status(400).send(error.details[0].message);
+    }else{
+        const use = await user.findOne({email:req.body.email});
+        if(!user) return res.status(200).json('email is not valid please check email and try again!!!');
+        const validatepassword = await bcrypt.compare(req.body.password,use.password);
+        if(!validatepassword) return res.status(200).json({msg:'password is not correct please password and try again!!!'});
+
+
+
+           const token  = jwt.sign({_id:use._id},process.env.Token);
+           res.header('auth-token',token).json({
+               token:token,
+               mes:"login sucessfull"
+           });
+    }
+
+})
     
 
 router.put('/update/:name',token,async(req,res)=>{
