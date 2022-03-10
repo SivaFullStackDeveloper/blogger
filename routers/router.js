@@ -5,6 +5,8 @@ const token   = require('../jwttoken');
 const user    = require('../database/user.models');
 const joi     = require('@hapi/joi');
 const jwt     = require('jsonwebtoken');
+const dotenv = require('dotenv');
+dotenv.config();
 
 
 router.get('/',async(req,res)=>{
@@ -67,12 +69,12 @@ router.get('/checkemail/:email',async(req,res)=>{
 router.post("/profile/login",async(req, res) => {
     
     const use = await user.findOne({email:req.body.email});
-        if(!use) return res.status(400).json({msg:'email is not valid please check email and try again!!!'});
+        if(!use) return res.status(400).send({msg:'email is not valid please check email and try again!!!'});
         const validatepassword = await bcrypt.compare(req.body.password,use.password);
-        if(!validatepassword) return res.status(400).json({msg:'password is not correct please check  password and try again!!!'});
+        if(!validatepassword) return res.status(400).send({msg:'password is not correct please check  password and try again!!!'});
 if(validatepassword){
     const token  = jwt.sign({email:req.body.email},process.env.Token,{});
-    res.status(200).json({
+    res.status(200).send({
         token:token,
         msg: "success",
         success:true,
