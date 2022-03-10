@@ -1,6 +1,6 @@
 const express = require('express');
-const bcrypt  = require('bcryptjs');
 const router  = express.Router();
+const bcrypt  = require('bcryptjs');
 const token   = require('../jwttoken');
 const user    = require('../database/user.models');
 const joi     = require('@hapi/joi');
@@ -27,7 +27,7 @@ router.post('/user/register',async(req,res)=>{
         if(error) return res.status(400).send(error.details[0].message);
         const userExist = await user.findOne({email:req.body.email});
         if(userExist) return res.status(400).send('user already exist');
-        const salt = await bcrypt.genSalt(15);
+        const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash(req.body.password,salt);
         const newUser = new user({
             name:req.body.name,
@@ -107,10 +107,11 @@ router.post('/profile/login',async(req,res)=>{
 
 
            const token  = jwt.sign({email:req.body.email},process.env.Token);
-           res.json({
-               token:token,
-               mes:"login sucessfull"
-           });
+            res.json({
+                token:token,
+                mes:"login sucessfull"
+            });
+          
 })
     
 
