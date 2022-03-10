@@ -5,7 +5,7 @@ dotenv.config();
 const checkToken = (req, res, next) => {
   let token = req.headers["authorization"];
   console.log(token);
-  token = token.slice(" ", token.length);
+  token = token.slice(7, token.length);
   if (token) {
     jwt.verify(token, process.env.Token, (err, decoded) => {
       if (err) {
