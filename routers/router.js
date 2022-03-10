@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt  = require('bcryptjs');
 const router  = express.Router();
-const tok   = require('../jwttoken');
+const token   = require('../jwttoken');
 const user    = require('../database/user.models');
 const joi     = require('@hapi/joi');
 const jwt     = require('jsonwebtoken');
@@ -66,63 +66,52 @@ router.get('/checkemail/:email',async(req,res)=>{
 });
 
 
-router.post('/profile/login',async(req, res) => {
-    
-    const use = await user.findOne({email:req.body.email});
-        if(!use) {
-            res.status(400).json({
-            status:false,});
-        }else{
-            const validPass = await bcrypt.compare(req.body.password,use.password);
-            if(!validPass) {
-                res.status(400).json({
-                status:false,});
-            }else if(validPass){
-                const token = jwt.sign({email:req.body.email},process.env.Token,{expiresIn:'1h'});
-                res.status(200).json({
-                    status:true,
-                    toke:token,
-                });
-            }else{
-                res.status(200).json({
-                    'error':"unknow error"
-                })
-            }
-        }
-     
-}
-
-     
-    
-
-  });
-
-// router.post('/profile/login',async(req,res)=>{
-//     const joischemaforlogin  = joi.object({
-//         email:joi.string().required().email(),
-//         password:joi.string().required().min(8),
-
+// router.route("/profile/login").post((req, res) => {
+//     user.findOne({ email: req.body.email }, (err, result) => {
+//       if (err) return res.status(500).json({ msg: err });
+//       if (result === null) {
+//         return res.status(403).json("Username incorrect");
+//       }
+//       const passwordIsValid = bcrypt.compare(
+//         req.body.password,
+//         result.password
+//         );
+//       if (!passwordIsValid) {
+//         // here we implement the JWT token functionality
+//         let token = jwt.sign({ email: req.body.email }, process.env.Token, {});
+  
+//         res.json({
+//           token: token,
+//           msg: "success",
+//         });
+//       } else {
+//         res.status(403).json("password is incorrect");
+//       }
 //     });
+//   });
 
-//     const {error} = joischemaforlogin.validate(req.body);
-//     if(error) {
-//         return res.status(400).send(error.details[0].message);
-//     }else{
-//         const use = await user.findOne({email:req.body.email});
-//         if(!user) return res.status(200).json('email is not valid please check email and try again!!!');
-//         const validatepassword = await bcrypt.compare(req.body.password,use.password);
-//         if(!validatepassword) return res.status(200).json({msg:'password is not correct please password and try again!!!'});
+router.post('/profile/login',async(req,res)=>{
+    // const joischemaforlogin  = joi.object({
+    //     email:joi.string().required().email(),
+    //     password:joi.string().required().min(8),
+    // });
+    // const {error} = joischemaforlogin.validate(req.body);
+    // if(error) {
+    //     return res.status(400).send(error.details[0].message);
+    // }else{
+        const use = await user.findOne({email:req.body.email});
+        if(!user) return res.status(200).json('email is not valid please check email and try again!!!');
+        const validatepassword = await bcrypt.compare(req.body.password,use.password);
+        if(!validatepassword) return res.status(200).json({msg:'password is not correct please check password and try again!!!'});
 
 
 
-//            const token  = jwt.sign({_id:use._id},process.env.Token);
-//            res.header('auth-token',token).json({
-//                token:token,
-//                mes:"login sucessfull"
-//            });
-//     }
-
-// })
+           const token  = jwt.sign({email:req.body.email},process.env.Token);
+           res.json({
+               token:token,
+               mes:"login sucessfull"
+           });
+})
     
 
 router.put('/update/:name',token,async(req,res)=>{

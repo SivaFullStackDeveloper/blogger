@@ -26,10 +26,6 @@ const connecttodb = async()=>{
   
     try{
         await mongoose.connect(url,{
-            
-      
-      
-      
             autoIndex:false,
             useUnifiedTopology: true,
             bufferCommands:false,

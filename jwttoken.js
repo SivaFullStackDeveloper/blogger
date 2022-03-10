@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const checkToken = (req, res, next) => {
+let checkToken = (req, res, next) => {
   let token = req.headers["authorization"];
   console.log(token);
   token = token.slice(7, token.length);
