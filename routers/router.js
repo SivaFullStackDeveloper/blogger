@@ -27,7 +27,7 @@ router.post('/user/register',async(req,res)=>{
         if(error) return res.status(400).send(error.details[0].message);
         const userExist = await user.findOne({email:req.body.email});
         if(userExist) return res.status(400).send('user already exist');
-        const salt = await bcrypt.genSalt(10);
+        const salt = await bcrypt.genSalt(15);
         const hash = await bcrypt.hash(req.body.password,salt);
         const newUser = new user({
             name:req.body.name,
@@ -102,15 +102,20 @@ router.post('/profile/login',async(req,res)=>{
         const use = await user.findOne({email:req.body.email});
         if(!user) return res.status(200).json('email is not valid please check email and try again!!!');
         const validatepassword = await bcrypt.compare(req.body.password,use.password);
-        if(!validatepassword) return res.status(200).json({msg:'password is not correct please check password and try again!!!'});
-
-
-
-           const token  = jwt.sign({email:req.body.email},process.env.Token);
-            res.json({
+        if(!validatepassword){
+            res.status(200).json({msg:'password is not correct please check password and try again!!!'});
+        } else{
+            const token  = jwt.sign({email:req.body.email},process.env.Token,{});
+            resjson({
                 token:token,
-                mes:"login sucessfull"
+                mes:"login sucessfull",
+                status:false,
             });
+
+        }
+
+
+          
           
 })
     
