@@ -67,11 +67,11 @@ router.get('/checkemail/:email',async(req,res)=>{
 router.post("/profile/login",async(req, res) => {
     
     const use = await user.findOne({email:req.body.email});
-        if(!use) return res.status(500).json({msg:'email is not valid please check email and try again!!!'});
+        if(!use) return res.status(400).json({msg:'email is not valid please check email and try again!!!'});
         const validatepassword = await bcrypt.compare(req.body.password,use.password);
-        if(!validatepassword) return res.status(500).json({msg:'password is not correct please check  password and try again!!!'});
+        if(!validatepassword) return res.status(400).json({msg:'password is not correct please check  password and try again!!!'});
 if(validatepassword){
-    const token  = jwt.sign({email:req.body.email},process.env.Token);
+    const token  = jwt.sign({email:req.body.email},process.env.Token,{});
     res.status(200).json({
         token:token,
         msg: "success",
