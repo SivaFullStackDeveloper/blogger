@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt  = require('bcryptjs');
 const router  = express.Router();
-const token   = require('../jwttoken');
+const tok   = require('../jwttoken');
 const user    = require('../database/user.models');
 const joi     = require('@hapi/joi');
 const jwt     = require('jsonwebtoken');
@@ -78,10 +78,10 @@ router.post('/profile/login',async(req, res) => {
                 res.status(400).json({
                 status:false,});
             }else if(validPass){
-                const token = jwt.sign({_id:use._id},process.env.Token,{expiresIn:'1h'});
+                const token = jwt.sign({email:req.body.email},process.env.Token,{expiresIn:'1h'});
                 res.status(200).json({
                     status:true,
-                    token:token,
+                    toke:token,
                 });
             } else{
                 res.status(400).json({
