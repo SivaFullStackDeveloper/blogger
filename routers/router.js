@@ -83,9 +83,11 @@ router.post('/profile/login',async(req, res) => {
                     status:true,
                     toke:token,
                 });
-            } else{
-                res.status(400).json({
-                    status:false,});
+            }else{
+                res.status(200).json({
+                    'error':"unknow error"
+                })
+            }
         }
      
 }
