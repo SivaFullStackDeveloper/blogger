@@ -46,6 +46,7 @@ const connecttodb = async()=>{
 const middleware = async()=>{
     app.use('/',authuse);
     app.use('/user/register',authuse);
+    app.use('/profile/login',authuse);
 }
 const listentoport = async()=>{
     app.listen(webport||port,()=>{
