@@ -73,12 +73,12 @@ router.post("/profile/login",async(req, res) => {
         const validatepassword = await bcrypt.compare(req.body.password,use.password);
         if(!validatepassword) return res.status(400).send({msg:'password is not correct please check  password and try again!!!'});
 if(validatepassword){
-    const token  = jwt.sign({email:req.body.email},process.env.Token,{});
-    res.status(200).send({
-        token:token,
-        msg: "success",
-        success:true,
-    });
+
+    const token  = jwt.sign({email:req.body.email},process.env.Token,{expiresIn:'1h'});
+               res.header('auth-token',token).json({
+                   token:token,
+                   mes:"login sucessfull"
+               });
 
 }else{
     res.status(500).json({msg:'password is not correct please check  password and try again!!!'});
