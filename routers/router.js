@@ -106,7 +106,7 @@ router.post('/profile/login',async(req,res)=>{
             res.status(200).json({msg:'password is not correct please check password and try again!!!'});
         } else{
             const token  = jwt.sign({email:req.body.email},process.env.Token,{});
-            resjson({
+            res.json({
                 token:token,
                 mes:"login sucessfull",
                 status:false,
