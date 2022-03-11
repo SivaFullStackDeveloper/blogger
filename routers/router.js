@@ -99,24 +99,32 @@ router.post('/profile/login',async(req,res)=>{
     // if(error) {
     //     return res.status(400).send(error.details[0].message);
     // }else{
-        const use = await user.findOne({email:req.body.email});
-        if(!user) return res.status(200).json('email is not valid please check email and try again!!!');
+        try{
+            const use = await user.findOne({email:req.body.email});
+        if(!use) {
+             res.status(200).json({msg:'email is not valid please check email and try again!!!',status:true});
+        }
         const validatepassword = await bcrypt.compare(req.body.password,use.password);
         if(!validatepassword){
-            res.status(200).json({msg:'password is not correct please check password and try again!!!'});
-        } else{
+            res.status(200).json({
+                msg:'password is not correct please check password and try again!!!',
+                status:true,
+            });
+        } 
+        else{
             const token  = jwt.sign({email:req.body.email},process.env.Token,{});
             res.json({
                 token:token,
                 mes:"login sucessfull",
                 status:false,
             });
+        } 
 
+        }catch(e){
+            console.log(e);
         }
-
-
-          
-          
+     
+              
 })
     
 
