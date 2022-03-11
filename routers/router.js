@@ -159,15 +159,5 @@ router.delete('/delete/:name',async(req,res)=>{
 })
 
 
-router.get('/:name',async(req,res)=>{
-    const userExist = await user.findOne({name:req.params.name});
-    if(!userExist) return res.status(400).send('user does not exist! create an account');
-    res.json({
-        data:userExist,
-        name:req.params.name,
-    });
-})
-
-
 
 module.exports = router;
