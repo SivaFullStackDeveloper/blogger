@@ -2,6 +2,8 @@ const express  = require('express');
 const mongoose = require('mongoose');
 const dotenv   = require('dotenv');
 const authuse  = require('./routers/router');
+const profiler = require('./routers/profile');
+const token = require('./jwttoken');
 
 
 dotenv.config();
@@ -38,11 +40,13 @@ const connecttodb = async()=>{
    
 }
 
-
 const middleware = async()=>{
     app.use('/',authuse);
     app.use('/user/register',authuse);
     app.use('/profile/login',authuse);
+    app.use('/',profiler);
+    app.use('/add',profiler);
+    app.use('/add/image',profiler);
 }
 const listentoport = async()=>{
     app.listen(webport||port,()=>{
@@ -50,7 +54,6 @@ const listentoport = async()=>{
     });
 
 }
-
 
 initialvar().then(()=>{
     listentoport().then(()=>{

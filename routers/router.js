@@ -19,7 +19,7 @@ router.get('/',async(req,res)=>{
 
 router.post('/user/register',async(req,res)=>{
      const joischema = joi.object({
-        name    : joi.string().required().min(6),
+        username    : joi.string().required().min(6),
         email   : joi.string().required().email(),
         password: joi.string().required().min(8),
      });
@@ -30,7 +30,7 @@ router.post('/user/register',async(req,res)=>{
         const salt = await bcrypt.genSalt(15);
         const hash = await bcrypt.hash(req.body.password,salt);
         const newUser = new user({
-            name:req.body.name,
+            username:req.body.username,
             email:req.body.email,
             password:hash,
         });
@@ -39,10 +39,11 @@ router.post('/user/register',async(req,res)=>{
 });
 
 router.get('/checkuser/:name',async(req,res)=>{
-    const userExist = await user.findOne({name:req.params.name});
+    const userExist = await user.findOne({username:req.params.username});
   
     if(userExist) {
     res.status(200).json({
+       
         status:true,
 
     });}else{
@@ -58,6 +59,7 @@ router.get('/checkemail/:email',async(req,res)=>{
     if(userExist) {
     res.status(200).json({
         status:true,
+        message:userExist.name,
     });}else{
         res.status(200).json({
             status:false,
@@ -136,7 +138,7 @@ router.put('/update/:name',token,async(req,res)=>{
     if(error) return res.status(400).send(error.details[0].message);
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(req.body.password,salt);
-     await user.findOneAndUpdate(req.params.name,{$set:{
+     await user.findOneAndUpdate(req.params.username,{$set:{
         
         password:hash,
     }},{new:true,},
